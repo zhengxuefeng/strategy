@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.lsh.strategy"/>
+
+    <!-- 数据源BoneCP连接池 -->
+    <bean id="baseDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl"
+                  value="jdbc:mysql://192.168.60.151:6200/lsh_tms"/>
+        <property name="username" value="dump"/>
+        <property name="password" value="lshdump"/>
+
+        <!--<property name="driverClass" value="com.mysql.jdbc.Driver"/>-->
+        <!--<property name="jdbcUrl"-->
+                <!--value="jdbc:mysql://192.168.60.59:5200/lsh_tms_test"/>-->
+        <!--<property name="username" value="root"/>-->
+        <!--<property name="password" value=""/>-->
+
+        <!--检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0-->
+        <property name="idleConnectionTestPeriodInMinutes" value="240"/>
+        <!--连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0-->
+        <property name="idleMaxAgeInMinutes" value="60"/>
+        <!--每个分区最大的连接数 -->
+        <property name="maxConnectionsPerPartition" value="20"/>
+        <!--每个分区最小的连接数 -->
+        <property name="minConnectionsPerPartition" value="5"/>
+        <!--分区数，默认值2，最小1，推荐3-4，视应用而定  -->
+        <property name="partitionCount" value="2"/>
+        <!-- 当连接池中的连接耗尽的时候一次同时获取的连接数。Default: 1 -->
+        <property name="acquireIncrement" value="5"/>
+        <!--缓存prepared statements的大小，默认值：0 -->
+        <property name="statementsCacheSize" value="1"/>
+        <!--每个分区释放链接助理进程的数量，默认值：3 -->
+        <property name="defaultAutoCommit" value="true"/>
+        <!--链接超时，默认值：Long.MAX_VALUE;单位：毫秒 -->
+        <property name="connectionTimeoutInMs" value="3000"/>
+    </bean>
+
+
+
+    <bean id="baseJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="baseDataSource" />
+    </bean>
+
+
+    <!-- jedis 读连接池配置-->
+    <bean id="jedisPoolConfig_r" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="1000"/>
+        <property name="maxIdle" value="500"/>
+        <property name="timeBetweenEvictionRunsMillis" value="30000"/>
+        <property name="minEvictableIdleTimeMillis" value="30000"/>
+        <property name="testOnBorrow" value="true"/>
+    </bean>
+
+    <bean id="jedisConnectionFactory_r" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="192.168.60.151" p:password="" p:port="6389"
+          p:poolConfig-ref="jedisPoolConfig_r"/>
+
+    <bean id="redisTemplate_r" class="org.springframework.data.redis.core.RedisTemplate"
+          p:connectionFactory-ref="jedisConnectionFactory_r">
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
+
+    <!-- <bean id="driverRecommend" class="com.lsh.strategy.helper"/>
+
+    <bean id="recommendTest" class="com.lsh.driver.RecommendTest"/>
+    <bean id="getdata" class="com.lsh.driver.GetData"/>
+    -->
+    <bean id="getdata" class="com.lsh.strategy.helper.GetData"/>
+
+    <bean id="limitJudge" class="com.lsh.strategy.helper.LimitJudge"/>
+
+
+
+    <bean id="timeLimit" class="com.lsh.strategy.helper.CalComeTime"/>
+
+    <bean id="driverRank" class="com.lsh.strategy.helper.DriverRank"/>
+
+
+
+
+    <!--<bean id="fileData" class="com.lsh.strategy.helper.FileData"-->
+          <!--init-method="init" destroy-method="close">-->
+    <!--</bean>-->
+
+    <bean id="recommendHandler" class="com.lsh.strategy.handler.RecommendHandler"
+                 init-method="init" destroy-method="close">
+    </bean>
+
+
+
+
+    <bean id="recommendServer" class="com.lsh.strategy.start.RecommendServer"
+          init-method="init" destroy-method="close">
+        <!--<property name="serviceInterface" value="com.meituan.service.mobile.ppt.predict.thrift.PredictorServer"/> &lt;!&ndash; 接口类 &ndash;&gt;-->
+        <property name="rankImpl" ref="recommendHandler"/> <!-- 实现类 -->
+        <!--<property name="appKey" value="com.sankuai.bp.nlptm.prompredict"/>  &lt;!&ndash; 本地 appkey，建议重新注册一个 &ndash;&gt;-->
+        <property name="port" value="32011"/> <!-- Server 监听端口 -->
+        <!--<property name="clusterManager" value="OCTO"/> &lt;!&ndash; 集群工作模式 &ndash;&gt;-->
+    </bean>
+</beans>
