@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="trace">
+    <Properties>
+        <Property name="log_pattern">%-5level %d [%t] %c:%M(%L): %m%n</Property>
+    </Properties>
+    <appenders>
+        <!--<Console name="CONSOLE" target="SYSTEM_OUT" follow="true">-->
+        <!--<PatternLayout pattern="%d %-5p (%F:%L) - %m%n" />-->
+        <!--</Console>-->
+        <!--<Scribe name="rankFeaturesFlumeLog">-->
+        <!--<Property name="scribeHost">127.0.0.1</Property>-->
+        <!--<Property name="scribePort">4252</Property>-->
+        <!--<Property name="scribeCategory">nlptm_mingdian_predict_features</Property>-->
+        <!--<Property name="printExceptionStack">false</Property>-->
+        <!--<Property name="addStackTraceToMessage">false</Property>-->
+        <!--<Property name="timeToWaitBeforeRetry">6000</Property>-->
+        <!--<Property name="sizeOfInMemoryStoreForward">1000</Property>-->
+        <!--<ScribeLayout/>-->
+        <!--</Scribe>-->
+
+        <!--<RollingRandomAccessFile name="rootLog"-->
+        <!--immediateFlush="true" fileName="/Users/tianxin/Desktop/search-rank/server/logs/root.log"-->
+        <!--filePattern="/Users/tianxin/Desktop/search-rank/server/logs/root.log.%d{yyyy-MM-dd}">-->
+        <!--<PatternLayout>-->
+        <!--<pattern>${log_pattern}</pattern>-->
+        <!--</PatternLayout>-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy />-->
+        <!--</Policies>-->
+        <!--</RollingRandomAccessFile>-->
+
+        <RollingRandomAccessFile name="rootLog"
+                                 immediateFlush="true" fileName="logs/root.log"
+                                 filePattern="logs/root.log.%d{yyyy-MM-dd}">
+            <PatternLayout>
+                <pattern>${log_pattern}</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!--<RollingRandomAccessFile name="errorLog"-->
+        <!--immediateFlush="false" fileName="/opt/meituan/prom-predict/logs/error/error.log"-->
+        <!--filePattern="/opt/meituan/prom-predict/logs/error/error.log.%d{yyyy-MM-dd}">-->
+        <!--<PatternLayout>-->
+        <!--<pattern>${log_pattern}</pattern>-->
+        <!--</PatternLayout>-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy />-->
+        <!--</Policies>-->
+        <!--<Filters>-->
+        <!--<ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>-->
+        <!--</Filters>-->
+        <!--</RollingRandomAccessFile>-->
+        <!--<RollingRandomAccessFile name="handlerLog"-->
+        <!--immediateFlush="false" fileName="/opt/meituan/prom-predict/logs/handler/handler.log"-->
+        <!--filePattern="/opt/meituan/prom-predict/logs/handler/handler.log.%d{yyyy-MM-dd}">-->
+        <!--<PatternLayout>-->
+        <!--<pattern>${log_pattern}</pattern>-->
+        <!--</PatternLayout>-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy />-->
+        <!--</Policies>-->
+        <!--</RollingRandomAccessFile>-->
+        <!--<RollingRandomAccessFile name="helperLog"-->
+        <!--immediateFlush="false" fileName="/opt/meituan/prom-predict/logs/helper/helper.log"-->
+        <!--filePattern="/opt/meituan/prom-predict/logs/helper/helper.log.%d{yyyy-MM-dd}">-->
+        <!--<PatternLayout>-->
+        <!--<pattern>${log_pattern}</pattern>-->
+        <!--</PatternLayout>-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy />-->
+        <!--</Policies>-->
+        <!--</RollingRandomAccessFile>-->
+        <!--<RollingRandomAccessFile name="predictLog"-->
+        <!--immediateFlush="false" fileName="/opt/meituan/prom-predict/logs/predict/predict.log"-->
+        <!--filePattern="/opt/meituan/prom-predict/logs/predict/predict.log.%d{yyyy-MM-dd}">-->
+        <!--<PatternLayout>-->
+        <!--<pattern>${log_pattern}</pattern>-->
+        <!--</PatternLayout>-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy />-->
+        <!--</Policies>-->
+        <!--</RollingRandomAccessFile>-->
+        <!--<RollingRandomAccessFile name="jmonitorLog"-->
+        <!--immediateFlush="false" fileName="/opt/meituan/prom-predict/logs/jmonitor/jmonitor.log"-->
+        <!--filePattern="/opt/meituan/prom-predict/logs/jmonitor/jmonitor.log.%d{yyyy-MM-dd}">-->
+        <!--<PatternLayout>-->
+        <!--<pattern>${log_pattern}</pattern>-->
+        <!--</PatternLayout>-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy />-->
+        <!--</Policies>-->
+        <!--</RollingRandomAccessFile>-->
+        <!--<RollingRandomAccessFile name="jmonitorStoreLog"-->
+        <!--immediateFlush="false" fileName="/opt/meituan/prom-predict/logs/jmonitor/jmonitor.store.log"-->
+        <!--filePattern="/opt/meituan/prom-predict/logs/jmonitor/jmonitor.store.log.%d{yyyy-MM-dd}">-->
+        <!--<PatternLayout>-->
+        <!--<pattern>${log_pattern}</pattern>-->
+        <!--</PatternLayout>-->
+        <!--<Policies>-->
+        <!--<TimeBasedTriggeringPolicy />-->
+        <!--</Policies>-->
+        <!--</RollingRandomAccessFile>-->
+
+    </appenders>
+    <loggers>
+        <!--<logger name="com.meituan.service.mobile.prom.strategy.predict"-->
+        <!--additivity="false" includeLocation="true" level="info">-->
+        <!--<appender-ref ref="rootLog" />-->
+        <!--<appender-ref ref="errorLog" />-->
+        <!--</logger>-->
+        <!--<logger name="com.meituan.service.mobile.prom.strategy.predict.handler"-->
+        <!--additivity="false" includeLocation="true" level="info">-->
+        <!--<appender-ref ref="handlerLog" />-->
+        <!--<appender-ref ref="errorLog" />-->
+        <!--</logger>-->
+        <!--<logger name="com.meituan.service.mobile.prom.strategy.predict.helper"-->
+        <!--additivity="false" includeLocation="true" level="info">-->
+        <!--<appender-ref ref="helperLog" />-->
+        <!--<appender-ref ref="errorLog" />-->
+        <!--</logger>-->
+        <!--<logger name="com.meituan.service.mobile.prom.strategy.predict.predict"-->
+        <!--additivity="false" includeLocation="true" level="info">-->
+        <!--<appender-ref ref="predictLog" />-->
+        <!--<appender-ref ref="errorLog" />-->
+        <!--</logger>-->
+        <!--<logger name="jmonitor"-->
+        <!--additivity="false" includeLocation="true" level="info">-->
+        <!--<appender-ref ref="jmonitorLog" />-->
+        <!--</logger>-->
+        <!--<logger name="jmonitorlogstore"-->
+        <!--additivity="false" includeLocation="true" level="info">-->
+        <!--<appender-ref ref="jmonitorStoreLog" />-->
+        <!--</logger>-->
+        <!--<logger name="rank_feature_logger"-->
+        <!--additivity="false" level="info">-->
+        <!--<appender-ref ref="rankFeaturesFlumeLog" />-->
+        <!--</logger>-->
+
+
+
+        <logger name="com.lsh.strategy.start.RecommendServer" additivity="false" level="info">
+            <appender-ref ref="rootLog" />
+        </logger>
+
+        <logger name="com.lsh.strategy.helper" additivity="false" level="info">
+            <appender-ref ref="rootLog" />
+        </logger>
+
+        <root level="info" includeLocation="true">
+            <appender-ref ref="rootLog" />
+        </root>
+
+    </loggers>
+</configuration>

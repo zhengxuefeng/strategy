@@ -43,7 +43,7 @@ public class LimitJudge {
     //总箱数是否大于172箱
     public static boolean judgeTotalBox(Integer totalBox) {
         logger.info("total box count is : " + totalBox);
-        if (totalBox > 175) return true;
+        if (totalBox > 180) return true;
     return false;
 }
 
@@ -104,14 +104,14 @@ public class LimitJudge {
             isRestrictNumber = specialRegion(restrictNumberRegion, addressItemList);//用来判断这条线路是否有限号的限 0 没有  1 有
         }
 
-        boolean isTotalBoxCount = judgeTotalBox(totalBox);//总箱数是否大于172箱
+        boolean isTotalBoxCount = judgeTotalBox(totalBox);//总箱数是否大于180箱
         boolean isRestrict = judgeRestrictRegion(addressItemList);//整条线路是否有限行的点
         for (DriverItem item : driverItemList) {
 //            logger.info("total box count and car type : " + isTotalBoxCount  + "   " + item.getCarType());
             if (item.getCarType() == 2) {
                 if (isTotalBoxCount) {
                     logger.info("boxCountLimit:" + item.getDriverId());
-                    continue;//箱数大于172  去除小车司机
+                    continue;//箱数大于180  去除小车司机
                 }
             } else if (item.getCarType() == 1) {
                 if (isRestrict) {

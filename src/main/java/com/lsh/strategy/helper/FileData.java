@@ -191,6 +191,8 @@ public class FileData {
             return new Point2D.Double(117.005456, 39.11394);
         } else if (zone.equals("dc10")) {
             return new Point2D.Double(116.522884, 40.003638);
+        } else if (zone.equals("dc59")) {
+            return new Point2D.Double(120.308824, 30.330043);
         } else if (zone.equals("dc55")) {
             return new Point2D.Double(120.308824, 30.330043);
         } else if (zone.equals("dc59-1")) {
@@ -222,7 +224,8 @@ public class FileData {
         }
         logger.info("no day sent size is " + noDaySent.size());
     }
-    public static List<String> getNotSentDriverIdList(){
+
+    public static List<String> getNotSentDriverIdList() {
         return noDaySent;
     }
 

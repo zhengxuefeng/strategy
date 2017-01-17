@@ -1,0 +1,9 @@
+INFO  2016-11-29 11:22:22,805 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7426dfa5: startup date [Tue Nov 29 11:22:22 CST 2016]; root of context hierarchy
+INFO  2016-11-29 11:22:22,903 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-29 11:22:24,749 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-29 14:47:19,829 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@4793b582: startup date [Tue Nov 29 14:47:19 CST 2016]; root of context hierarchy
+INFO  2016-11-29 14:47:19,907 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-29 14:47:21,526 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-29 14:58:00,837 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@59824bc: startup date [Tue Nov 29 14:58:00 CST 2016]; root of context hierarchy
+INFO  2016-11-29 14:58:00,895 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-29 14:58:02,607 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start

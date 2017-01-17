@@ -1,0 +1,273 @@
+ERROR 2016-11-11 10:25:56,904 [pool-2-thread-5] org.apache.thrift.server.TThreadPoolServer:run(295): Thrift error occurred during processing of message.
+org.apache.thrift.TException: Service name not found: RecommendServer.  Did you forget to call registerProcessor()?
+	at org.apache.thrift.TMultiplexedProcessor.process(TMultiplexedProcessor.java:111) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:286) [libthrift-0.9.3.jar:0.9.3]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145) [?:1.7.0_80]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615) [?:1.7.0_80]
+	at java.lang.Thread.run(Thread.java:745) [?:1.7.0_80]
+INFO  2016-11-11 10:31:19,460 [pool-2-thread-5] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+ERROR 2016-11-11 10:32:08,477 [pool-2-thread-5] org.apache.thrift.server.TThreadPoolServer:run(297): Error occurred during processing of message.
+org.springframework.data.redis.RedisConnectionFailureException: Cannot get Jedis connection; nested exception is redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:198) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.getConnection(JedisConnectionFactory.java:345) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:128) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:91) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:78) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:189) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:164) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.AbstractOperations.execute(AbstractOperations.java:88) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.DefaultValueOperations.get(DefaultValueOperations.java:43) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at com.lsh.strategy.dao.RedisStringDao.get(RedisStringDao.java:26) ~[classes/:?]
+	at com.lsh.strategy.helper.GetData.getHas(GetData.java:25) ~[classes/:?]
+	at com.lsh.strategy.helper.DriverRank.countWalk(DriverRank.java:21) ~[classes/:?]
+	at com.lsh.strategy.handler.RecommendHandler.driverRecommend(RecommendHandler.java:80) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:177) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:162) ~[classes/:?]
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TMultiplexedProcessor.process(TMultiplexedProcessor.java:123) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:286) [libthrift-0.9.3.jar:0.9.3]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145) [?:1.7.0_80]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615) [?:1.7.0_80]
+	at java.lang.Thread.run(Thread.java:745) [?:1.7.0_80]
+Caused by: redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at redis.clients.util.Pool.getResource(Pool.java:50) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+Caused by: redis.clients.jedis.exceptions.JedisConnectionException: java.net.ConnectException: Connection refused
+	at redis.clients.jedis.Connection.connect(Connection.java:155) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryClient.connect(BinaryClient.java:83) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryJedis.connect(BinaryJedis.java:1643) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisFactory.makeObject(JedisFactory.java:85) ~[jedis-2.7.2.jar:?]
+	at org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) ~[commons-pool2-2.3.jar:2.3]
+	at redis.clients.util.Pool.getResource(Pool.java:48) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+Caused by: java.net.ConnectException: Connection refused
+	at java.net.PlainSocketImpl.socketConnect(Native Method) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182) ~[?:1.7.0_80]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.7.0_80]
+	at java.net.Socket.connect(Socket.java:579) ~[?:1.7.0_80]
+	at redis.clients.jedis.Connection.connect(Connection.java:149) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryClient.connect(BinaryClient.java:83) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryJedis.connect(BinaryJedis.java:1643) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisFactory.makeObject(JedisFactory.java:85) ~[jedis-2.7.2.jar:?]
+	at org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) ~[commons-pool2-2.3.jar:2.3]
+	at redis.clients.util.Pool.getResource(Pool.java:48) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+INFO  2016-11-11 10:33:30,188 [pool-2-thread-5] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+ERROR 2016-11-11 10:33:48,743 [pool-2-thread-5] org.apache.thrift.server.TThreadPoolServer:run(297): Error occurred during processing of message.
+org.springframework.data.redis.RedisConnectionFailureException: Cannot get Jedis connection; nested exception is redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:198) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.getConnection(JedisConnectionFactory.java:345) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:128) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:91) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:78) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:189) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:164) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.AbstractOperations.execute(AbstractOperations.java:88) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.DefaultValueOperations.get(DefaultValueOperations.java:43) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at com.lsh.strategy.dao.RedisStringDao.get(RedisStringDao.java:26) ~[classes/:?]
+	at com.lsh.strategy.helper.GetData.getHas(GetData.java:25) ~[classes/:?]
+	at com.lsh.strategy.helper.DriverRank.countWalk(DriverRank.java:21) ~[classes/:?]
+	at com.lsh.strategy.handler.RecommendHandler.driverRecommend(RecommendHandler.java:80) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:177) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:162) ~[classes/:?]
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TMultiplexedProcessor.process(TMultiplexedProcessor.java:123) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:286) [libthrift-0.9.3.jar:0.9.3]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145) [?:1.7.0_80]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615) [?:1.7.0_80]
+	at java.lang.Thread.run(Thread.java:745) [?:1.7.0_80]
+Caused by: redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at redis.clients.util.Pool.getResource(Pool.java:50) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+Caused by: redis.clients.jedis.exceptions.JedisConnectionException: java.net.ConnectException: Connection refused
+	at redis.clients.jedis.Connection.connect(Connection.java:155) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryClient.connect(BinaryClient.java:83) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryJedis.connect(BinaryJedis.java:1643) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisFactory.makeObject(JedisFactory.java:85) ~[jedis-2.7.2.jar:?]
+	at org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) ~[commons-pool2-2.3.jar:2.3]
+	at redis.clients.util.Pool.getResource(Pool.java:48) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+Caused by: java.net.ConnectException: Connection refused
+	at java.net.PlainSocketImpl.socketConnect(Native Method) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182) ~[?:1.7.0_80]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.7.0_80]
+	at java.net.Socket.connect(Socket.java:579) ~[?:1.7.0_80]
+	at redis.clients.jedis.Connection.connect(Connection.java:149) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryClient.connect(BinaryClient.java:83) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryJedis.connect(BinaryJedis.java:1643) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisFactory.makeObject(JedisFactory.java:85) ~[jedis-2.7.2.jar:?]
+	at org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) ~[commons-pool2-2.3.jar:2.3]
+	at redis.clients.util.Pool.getResource(Pool.java:48) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+INFO  2016-11-11 10:52:34,072 [pool-2-thread-5] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+ERROR 2016-11-11 10:53:00,339 [pool-2-thread-5] org.apache.thrift.server.TThreadPoolServer:run(297): Error occurred during processing of message.
+org.springframework.data.redis.RedisConnectionFailureException: Cannot get Jedis connection; nested exception is redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:198) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.getConnection(JedisConnectionFactory.java:345) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:128) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:91) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:78) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:189) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:164) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.AbstractOperations.execute(AbstractOperations.java:88) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at org.springframework.data.redis.core.DefaultValueOperations.get(DefaultValueOperations.java:43) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	at com.lsh.strategy.dao.RedisStringDao.get(RedisStringDao.java:26) ~[classes/:?]
+	at com.lsh.strategy.helper.GetData.getHas(GetData.java:25) ~[classes/:?]
+	at com.lsh.strategy.helper.DriverRank.countWalk(DriverRank.java:21) ~[classes/:?]
+	at com.lsh.strategy.handler.RecommendHandler.driverRecommend(RecommendHandler.java:80) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:177) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:162) ~[classes/:?]
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TMultiplexedProcessor.process(TMultiplexedProcessor.java:123) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:286) [libthrift-0.9.3.jar:0.9.3]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145) [?:1.7.0_80]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615) [?:1.7.0_80]
+	at java.lang.Thread.run(Thread.java:745) [?:1.7.0_80]
+Caused by: redis.clients.jedis.exceptions.JedisConnectionException: Could not get a resource from the pool
+	at redis.clients.util.Pool.getResource(Pool.java:50) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+Caused by: redis.clients.jedis.exceptions.JedisConnectionException: java.net.ConnectException: Connection refused
+	at redis.clients.jedis.Connection.connect(Connection.java:155) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryClient.connect(BinaryClient.java:83) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryJedis.connect(BinaryJedis.java:1643) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisFactory.makeObject(JedisFactory.java:85) ~[jedis-2.7.2.jar:?]
+	at org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) ~[commons-pool2-2.3.jar:2.3]
+	at redis.clients.util.Pool.getResource(Pool.java:48) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+Caused by: java.net.ConnectException: Connection refused
+	at java.net.PlainSocketImpl.socketConnect(Native Method) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200) ~[?:1.7.0_80]
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182) ~[?:1.7.0_80]
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392) ~[?:1.7.0_80]
+	at java.net.Socket.connect(Socket.java:579) ~[?:1.7.0_80]
+	at redis.clients.jedis.Connection.connect(Connection.java:149) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryClient.connect(BinaryClient.java:83) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.BinaryJedis.connect(BinaryJedis.java:1643) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisFactory.makeObject(JedisFactory.java:85) ~[jedis-2.7.2.jar:?]
+	at org.apache.commons.pool2.impl.GenericObjectPool.create(GenericObjectPool.java:861) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:435) ~[commons-pool2-2.3.jar:2.3]
+	at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) ~[commons-pool2-2.3.jar:2.3]
+	at redis.clients.util.Pool.getResource(Pool.java:48) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:86) ~[jedis-2.7.2.jar:?]
+	at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) ~[jedis-2.7.2.jar:?]
+	at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ~[spring-data-redis-1.7.2.RELEASE.jar:?]
+	... 21 more
+INFO  2016-11-11 11:00:56,943 [pool-2-thread-5] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+ERROR 2016-11-11 11:01:22,231 [pool-2-thread-5] org.apache.thrift.server.TThreadPoolServer:run(297): Error occurred during processing of message.
+java.lang.NullPointerException
+	at com.lsh.strategy.handler.RecommendHandler.driverRecommend(RecommendHandler.java:87) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:177) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:162) ~[classes/:?]
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TMultiplexedProcessor.process(TMultiplexedProcessor.java:123) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:286) [libthrift-0.9.3.jar:0.9.3]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145) [?:1.7.0_80]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615) [?:1.7.0_80]
+	at java.lang.Thread.run(Thread.java:745) [?:1.7.0_80]
+INFO  2016-11-11 11:27:09,378 [pool-2-thread-5] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+ERROR 2016-11-11 11:27:38,763 [pool-2-thread-5] org.apache.thrift.server.TThreadPoolServer:run(297): Error occurred during processing of message.
+java.lang.NullPointerException
+	at com.lsh.strategy.handler.RecommendHandler.driverRecommend(RecommendHandler.java:87) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:177) ~[classes/:?]
+	at com.lsh.service.driver.recommend.RecommendService$Processor$driverRecommend.getResult(RecommendService.java:162) ~[classes/:?]
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.TMultiplexedProcessor.process(TMultiplexedProcessor.java:123) ~[libthrift-0.9.3.jar:0.9.3]
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:286) [libthrift-0.9.3.jar:0.9.3]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145) [?:1.7.0_80]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615) [?:1.7.0_80]
+	at java.lang.Thread.run(Thread.java:745) [?:1.7.0_80]
+INFO  2016-11-11 11:28:10,588 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7361b46d: startup date [Fri Nov 11 11:28:10 CST 2016]; root of context hierarchy
+INFO  2016-11-11 11:28:10,691 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 11:28:12,284 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 11:28:53,888 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 11:29:14,057 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(94): get satisfy driver
+INFO  2016-11-11 11:31:05,397 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@138c9b49: startup date [Fri Nov 11 11:31:05 CST 2016]; root of context hierarchy
+INFO  2016-11-11 11:31:05,499 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 11:31:07,202 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 11:31:45,391 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 11:32:06,390 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(94): get satisfy driver
+INFO  2016-11-11 11:51:37,065 [pool-2-thread-2] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 11:52:04,111 [pool-2-thread-2] com.lsh.strategy.handler.RecommendHandler:driverRecommend(94): get satisfy driver
+INFO  2016-11-11 12:00:08,123 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7426dfa5: startup date [Fri Nov 11 12:00:08 CST 2016]; root of context hierarchy
+INFO  2016-11-11 12:00:08,199 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 12:00:09,901 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 12:00:47,344 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 12:01:11,070 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(94): get satisfy driver
+INFO  2016-11-11 14:53:09,838 [pool-2-thread-2] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 14:53:50,145 [pool-2-thread-2] com.lsh.strategy.handler.RecommendHandler:driverRecommend(94): get satisfy driver
+INFO  2016-11-11 14:54:56,508 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@24250536: startup date [Fri Nov 11 14:54:56 CST 2016]; root of context hierarchy
+INFO  2016-11-11 14:54:56,647 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 14:54:58,177 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 14:55:34,195 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 14:55:53,784 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(96): get satisfy driver
+INFO  2016-11-11 15:15:13,380 [pool-2-thread-3] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 15:15:55,349 [pool-2-thread-3] com.lsh.strategy.handler.RecommendHandler:driverRecommend(96): get satisfy driver
+INFO  2016-11-11 15:24:20,941 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@138c9b49: startup date [Fri Nov 11 15:24:20 CST 2016]; root of context hierarchy
+INFO  2016-11-11 15:24:21,051 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 15:24:22,596 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 15:24:59,518 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 15:25:22,704 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(96): get satisfy driver
+INFO  2016-11-11 15:39:22,949 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7361b46d: startup date [Fri Nov 11 15:39:22 CST 2016]; root of context hierarchy
+INFO  2016-11-11 15:39:23,056 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 15:39:24,660 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 15:40:03,957 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 15:40:39,414 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(96): get satisfy driver
+INFO  2016-11-11 16:16:45,237 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@138c9b49: startup date [Fri Nov 11 16:16:45 CST 2016]; root of context hierarchy
+INFO  2016-11-11 16:16:45,363 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 16:16:46,862 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 16:17:55,371 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 16:18:33,504 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(96): get satisfy driver
+INFO  2016-11-11 16:21:06,259 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@138c9b49: startup date [Fri Nov 11 16:21:06 CST 2016]; root of context hierarchy
+INFO  2016-11-11 16:21:06,360 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 16:21:08,018 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 16:21:42,153 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 16:22:07,693 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(96): get satisfy driver
+INFO  2016-11-11 16:46:05,998 [main] org.springframework.context.support.ClassPathXmlApplicationContext:prepareRefresh(581): Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@7361b46d: startup date [Fri Nov 11 16:46:05 CST 2016]; root of context hierarchy
+INFO  2016-11-11 16:46:06,099 [main] org.springframework.beans.factory.xml.XmlBeanDefinitionReader:loadBeanDefinitions(317): Loading XML bean definitions from class path resource [ApplicationContext.xml]
+INFO  2016-11-11 16:46:07,546 [main] com.lsh.strategy.start.RecommendServer:init(38): start_init start
+INFO  2016-11-11 16:46:51,155 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(59): driver recommend method start
+INFO  2016-11-11 16:47:19,045 [pool-2-thread-1] com.lsh.strategy.handler.RecommendHandler:driverRecommend(96): get satisfy driver

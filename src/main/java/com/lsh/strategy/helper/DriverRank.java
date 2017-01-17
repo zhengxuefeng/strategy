@@ -95,12 +95,17 @@ public class DriverRank {
                 Integer countSentMin = (hasSentMax + 2) > 10 ? (hasSentMax + 2) : 10;
                 if (driverScore.containsKey(driverId)) {
                     Double driverWeight = 0.3 * driverHasSent.get(driverId) / countSentMin + 0.1 * orderCount / 21 + 0.6 * driverScore.get(driverId);
-                    //如果该司机只能接受白天装货 如果需要晚上装货 就把他的权重降低点  这里是乘以0.5
+                    //如果该司机只能接受白天装货 如果需要晚上装货 就把他的权重降低点  这里是乘以0.2
                     Date now = new Date();
                     Integer nowHour = now.getHours();
                     if (noDaySent.contains(driverId) && (nowHour > 10 && nowHour < 19)){
-                        driverWeight *= 0.5;
+                        driverWeight *= 0.2;
                         logger.info("this driver can not sent in the evering : " + driverId);
+                    }
+                    // 如果这个司机最近三天 每天都有送货 相应降低权重
+                    if (getdata.getNumThreeDaySent(driverId) < 2){
+                        driverWeight += 0.3;
+                        logger.info("该司机最近3送货小于2次 : " + driverId);
                     }
                     logger.info("driver id , driver has sent and  recent order count : " + driverId + " " + driverHasSent.get(driverId) + " " + orderCount);
                     driverHasWalk.put(driverId, driverWeight);

@@ -98,14 +98,14 @@ public class CalComeTime {
         Map<String, String> lastOrderReceiptTime = new HashMap<String, String>();//每个司机 记录最后被签收一单的时间
 
 //        GetData getData = new GetData();
-        List<Object[]> result = getData.getOrderInfo();
-        for (Object[] arr : result) {
-            if (arr[0] == null || arr[1] == null || arr[2] == null) continue;
-            String driverId = arr[2].toString();
+        List<List<String>> result = getData.getOrderInfo();
+        for (List<String> arr : result) {
+            if (arr.get(0) == null || arr.get(1) == null || arr.get(2) == null || arr.get(3) == null) continue;
+            String driverId = arr.get(2);
             if (!driverIdList.contains(driverId)) continue;
-            String address = arr[0].toString();
-            String status = arr[1].toString();
-            String receiptTime = arr[3].toString();
+            String address = arr.get(0);
+            String status = arr.get(1);
+            String receiptTime = arr.get(3);
             String shopPosition_lng = "";
             String shopPosition_lat = "";
             try {
@@ -142,18 +142,19 @@ public class CalComeTime {
 
         List<String> satisfyDriverList = new ArrayList<String>();// 保存时间上能满足的司机id list
         //跟新每个司机对应的回来的时间  如果全部送完   则用最后一单回来的时间加上最后一单签收的时间作为回来的时间
-        // 如果没有送完   则用最后一单回来的时间加上最后一单签收的时间 再加上剩余点所需要的时间   作为回来的时间 精确到秒  其中会剔除未送点大于4个的司机
+        // 如果没有送完   则用最后一单回来的时间加上最后一单签收的时间 再加上剩余点所需要的时间   作为回来的时间 精确到秒  其中会剔除未送点大于8个的司机
         for (String driverId : driverIdList) {
             if ((!comeDistance.containsKey(driverId)) && (!countNoSent.containsKey(driverId))) {// 没有记录的认为是新司机
                 satisfyDriverList.add(driverId);
             } else {
                 long comeTime = 0;
                 Double dis = comeDistance.get(driverId);
+                logger.info("driver come distance : " + driverId + " " + dis);
                 if (countNoSent.containsKey(driverId)) {//司机有没有送完的点
                     int notSentCount = countNoSent.get(driverId);
-                    if (notSentCount > 6) {
-                        logger.info("delete driver id is " + driverId + " because not sent number is more 6");
-                        continue;//剔除未送点大于4个的司机
+                    if (notSentCount > 8) {
+                        logger.info("delete driver id is : " + driverId + " because not sent number is more 8");
+                        continue;//剔除未送点大于8个的司机
                     }
                     if (lastOrderReceiptTime.containsKey(driverId))
                         comeTime = (long) ((dis / 50 * 60) * 60 + (30 * notSentCount)) * 60 + Long.valueOf(lastOrderReceiptTime.get(driverId));
@@ -161,6 +162,7 @@ public class CalComeTime {
                     if (lastOrderReceiptTime.containsKey(driverId))
                         comeTime = (long) (dis / 50 * 60) * 60 + Long.valueOf(lastOrderReceiptTime.get(driverId));
                 }
+                logger.info("driver come time is : " + driverId + " " + comeTime);
                 long start = System.currentTimeMillis() / 1000;
                 long time_limit = timeLimit_minute * 60;
 //                logger.info("last order receipt time is : " + lastOrderReceiptTime.get(driverId));
@@ -168,7 +170,9 @@ public class CalComeTime {
 //                logger.info("time difference is : " + (comeTime - start));
                 if (comeTime - start > time_limit) {
                     logger.info("delete driver id is " + driverId + " this driver comeback time is more " + timeLimit_minute + "minute");
-                    continue;// 剔除回来时间大于200分钟的司机
+                    logger.info("该司机没有送到单数为：" + countNoSent.containsKey(driverId));
+                    logger.info("回来时间为：" + (comeTime - start));
+                    continue;// 剔除回来时间大于500分钟的司机
                 }
                 satisfyDriverList.add(driverId);
             }

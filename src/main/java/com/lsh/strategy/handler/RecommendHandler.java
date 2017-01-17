@@ -46,7 +46,7 @@ public class RecommendHandler implements RecommendService.Iface {
     //返回服务 司机列表  顺序为  可选司机 时间限制司机 特殊条件司机 绑点司机  不满足硬性条件司机
     public OutputDriverRec finalResult(HashMap<String, DriverItem> recordInfo, List<String> driverSort,
                                        List<String> noTimeSatisfyDriverIdList, List<String> beFilteredDriverIdList,
-                                       List<String> boundLineDriverIdList, List<String> notMeetLimitDRiverIdList, String lineNumber) {
+                                       List<String> boundLineDriverIdList, List<String> notMeetLimitDRiverIdList, String lineNumber, String boundLineDriverId) {
 
         OutputDriverRec recommendDriverId = new OutputDriverRec();
         List<DriverItem> recResult = new ArrayList<DriverItem>();
@@ -98,6 +98,20 @@ public class RecommendHandler implements RecommendService.Iface {
 //            logger.info("notMeet 被硬性条件过滤 : " + driverId);
 //        }
         recommendDriverId.setRecommendDriverList(recResult);
+
+        //查看绑定司机排在第几位
+        Integer rank = 1;
+        boolean flag = false;
+        String boundDriverName = getData.readDriverName(boundLineDriverId);
+        for (DriverItem item : recResult){
+            if (item.getDriverId().equals(boundLineDriverId)){
+                logger.info("boundline driver rank " + lineNumber + ":" + rank);
+                logger.info("boundline driver name is : " + boundDriverName);
+                flag = true;
+            }
+            rank ++;
+        }
+        if (!flag) logger.info("no find bound driver ");
         return recommendDriverId;
 
     }
@@ -113,8 +127,9 @@ public class RecommendHandler implements RecommendService.Iface {
         Double sumLng = 0.0;
         Double sumLat = 0.0;
         logger.info("inputreqis : " + req.getDriverList());
-        if (req.getBoundLineDriverId() != null)
-            logger.info("bound line driverId is : " + req.getBoundLineDriverId());
+        String boundLineDriverId = req.getBoundLineDriverId();
+        if (boundLineDriverId != null)
+            logger.info("bound line driverId is : " + boundLineDriverId);
         else logger.info("no bound line driverId");
         if (req.getLineNumber() != null)
             logger.info("line number is : " + req.getLineNumber());
@@ -164,7 +179,7 @@ public class RecommendHandler implements RecommendService.Iface {
 //                    continue;
 //                }
 //            }
-            if (allboundLineDriverIdList.contains(item.getDriverId())) {
+            if (allboundLineDriverIdList.contains(item.getDriverId()) && (!item.getDriverId().equals(boundLineDriverId))) {
                 boundLineDriverIdList.add(item.getDriverId());
                 continue;
             }
@@ -184,7 +199,7 @@ public class RecommendHandler implements RecommendService.Iface {
         logger.info("bound line driver size is : " + boundLineDriverIdList.size());
         if (noboundLineDriverItemList.size() == 0) {
             logger.info("all driver has bounded line, so no satisfy driver");
-            return finalResult(recordInfo, driverSort, noTimeSatisfyDriverIdList, beFilteredDriverIdList, boundLineDriverIdList, notMeetLimitDRiverIdList, req.getLineNumber());
+            return finalResult(recordInfo, driverSort, noTimeSatisfyDriverIdList, beFilteredDriverIdList, boundLineDriverIdList, notMeetLimitDRiverIdList, req.getLineNumber(), boundLineDriverId);
         }
         logger.info("no bound line driver list size is : " + noboundLineDriverItemList.size());
 //        req.setDriverList(noboundLineDriverItemList);
@@ -205,12 +220,12 @@ public class RecommendHandler implements RecommendService.Iface {
 
         if (driverIdList.size() == 0) {
             logger.info("limit judge cause no driver is satisfy");
-            return finalResult(recordInfo, driverSort, noTimeSatisfyDriverIdList, beFilteredDriverIdList, boundLineDriverIdList, notMeetLimitDRiverIdList, req.getLineNumber());
+            return finalResult(recordInfo, driverSort, noTimeSatisfyDriverIdList, beFilteredDriverIdList, boundLineDriverIdList, notMeetLimitDRiverIdList, req.getLineNumber(), boundLineDriverId);
         }
         //特殊司机处理  如果被过滤  放在被特殊条件过滤的司机列表里面
         List<String> noSpecialDriver = new ArrayList<String>();
         if (req.getWarehouse().toLowerCase().contains("09")) {
-            if (req.getTotalBoxCount() > 235)
+            if (req.getTotalBoxCount() > 240)
                 for (String driverId : driverIdList) {
                     if (driverId.equals("218472916299087279")) {
                         beFilteredDriverIdList.add("218472916299087279");
@@ -239,10 +254,18 @@ public class RecommendHandler implements RecommendService.Iface {
                 beFilteredDriverIdList.add(driverId);
             }
         }
-        if (smallCarList.size() > 0) driverIdList = smallCarList;
+        if (smallCarList.size() > 0) {
+            logger.info("存在小车司机");
+            for (String driverId : smallCarList){
+                logger.info("小车司机 : " + driverId);
+            }
+            driverIdList = smallCarList;
+        }else {
+            beFilteredDriverIdList.clear();
+        }
         logger.info("driverId size is : " + driverIdList.size());
         logger.info("smallCarList size is : " + smallCarList.size());
-        int timeLimit_minute = 200;//  时间限制
+        int timeLimit_minute = 500;//  时间限制
         //计算出每个司机回来的时间   并筛选出回来时间满足的司机可以推荐
         List<String> TimeSatisfyDriverIdList = calComeTime.comeback(driverIdList, req.getWarehouse().toLowerCase(), timeLimit_minute);
         if (TimeSatisfyDriverIdList.size() == 0) {
@@ -299,7 +322,7 @@ public class RecommendHandler implements RecommendService.Iface {
 //        logger.info("get satisfy driver");
         long end = System.currentTimeMillis();
         logger.info("Time spent in service is " + (end - start));
-        return finalResult(recordInfo, driverSort, noTimeSatisfyDriverIdList, beFilteredDriverIdList, boundLineDriverIdList, notMeetLimitDRiverIdList, req.getLineNumber());
+        return finalResult(recordInfo, driverSort, noTimeSatisfyDriverIdList, beFilteredDriverIdList, boundLineDriverIdList, notMeetLimitDRiverIdList, req.getLineNumber(), boundLineDriverId);
     }
 
     @Override

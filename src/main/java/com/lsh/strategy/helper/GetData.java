@@ -1,6 +1,7 @@
 package com.lsh.strategy.helper;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lsh.strategy.util.Util;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class GetData {
 
     @Autowired
     private RedisHashDao redisHashDao;
+
 
 //    public RedisStringDao getRedisStringDao() {
 //        return redisStringDao;
@@ -58,39 +60,6 @@ public class GetData {
         }
     }
 
-    //读取数据库中订单相关信息
-    public List<Object[]> getOrderInfo() {
-        long start = System.currentTimeMillis();
-        Date dNow = new Date();   //当前时间
-        Date dBefore = new Date();
-        Calendar calendar = Calendar.getInstance(); //得到日历
-        calendar.setTime(dNow);//把当前时间赋给日历
-        calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
-        dBefore = calendar.getTime();   //得到前一天的时间
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
-        String defaultStartDate = sdf.format(dBefore);    //格式化前一天
-        String defaultEndDate = sdf.format(dNow); //格式化当前时间
-//        System.out.println("defaultStartDate : " + defaultStartDate + " defaultEndDate :  " + defaultEndDate);
-        String currentTime = Util.timestamp(defaultEndDate);
-        String beforeDay = Util.timestamp(defaultStartDate);
-//        System.out.println("当前时间戳为" + currentTime);
-//        System.out.println("昨天的时间戳为" + beforeDay);
-
-        List<Object[]> result = new ArrayList<Object[]>();
-        try {
-            String sql = "select address_info, receipt_status, trans_uid, arrived_at from order_shipping_head where " + "created_at >= '" + beforeDay +  "'";
-//            System.out.println("sql语句: " + sql);
-            System.out.println(sql);
-            result = baseJdbcTemplate.query(sql, new ObjectArrayMapper());
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.info("read sql order_shipping_head is error :  " + e.toString());
-        }
-        long end = System.currentTimeMillis();
-        logger.info("Time spent in getOrderInfo is " + (end - start));
-        return result;
-    }
 
     //读取数据库中所有绑定线路的司机
     public List<Object[]> getDriver() {
@@ -176,6 +145,76 @@ public class GetData {
             }
         }
         return driverHomeAddress;
+    }
+
+    //读取数据库中订单相关信息
+    public List<List<String>> getOrderInfo() {
+        long start = System.currentTimeMillis();
+
+        String redisResult = "";
+
+        try {
+            redisResult = redisHashDao.get("tms:driver_sql", "sql_result");
+//            logger.info("redisResult : " + redisResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.info("read sql_redis is error :  " + e.toString());
+        }
+        List<List<String>> result = new ArrayList<>();
+//        List result = new ArrayList<>();
+        try {
+            JSONObject object = JSON.parseObject(redisResult);
+//            result = JSONArray.parseArray(object.get("line_info").toString());
+//            result = JSONArray.parseArray(object.get("line_info").toString());
+//            logger.info("put redis is  : " + result);
+            for (JSONObject.Entry<String, Object> entry : object.entrySet()) {
+                String value = entry.getValue().toString();
+                String addressInfo = JSON.parseObject(value).get("address_info").toString();
+                String receiptStatus = JSON.parseObject(value).get("receipt_status").toString();
+                String transUid = JSON.parseObject(value).get("trans_uid").toString();
+                String arrivedAt = JSON.parseObject(value).get("arrived_at").toString();
+                List<String> sqlInfo = new ArrayList<>();
+                sqlInfo.add(addressInfo);
+                sqlInfo.add(receiptStatus);
+                sqlInfo.add(transUid);
+                sqlInfo.add(arrivedAt);
+//                logger.info("sql redis is : " + sqlInfo);
+                result.add(sqlInfo);
+            }
+        } catch (Exception e) {
+            logger.error(e.toString());
+            e.printStackTrace();
+        }
+        long end = System.currentTimeMillis();
+        logger.info("Time spent in getOrderInfo is " + (end - start));
+        return result;
+    }
+
+
+    //读redis  司机ID对应的名字
+    public String readDriverName(String driverId) {
+        String driverName = "";
+        try {
+            driverName = redisHashDao.get("tms:driver_name", driverId);
+        } catch (Exception e) {
+            logger.info(e.toString());
+            e.printStackTrace();
+        }
+        return driverName;
+    }
+
+    //读redis   查看司机id对应的最近三天送了几单   目前只考虑天津的情况
+    public Integer getNumThreeDaySent(String driverId) {
+        try {
+            String countNum = redisHashDao.get("tms:driver_count_threeDay_sent", driverId);
+            if (redisHashDao.hasKey("tms:driver_count_threeDay_sent", driverId)) {
+                return Integer.valueOf(countNum);
+            } else return 0;
+        } catch (Exception e) {
+            logger.info(e.toString());
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }
