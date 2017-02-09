@@ -152,6 +152,7 @@ public class CalComeTime {
                 logger.info("driver come distance : " + driverId + " " + dis);
                 if (countNoSent.containsKey(driverId)) {//司机有没有送完的点
                     int notSentCount = countNoSent.get(driverId);
+                    logger.info("driver not sent point is : " + driverId + " " + notSentCount);
                     if (notSentCount > 8) {
                         logger.info("delete driver id is : " + driverId + " because not sent number is more 8");
                         continue;//剔除未送点大于8个的司机
@@ -163,6 +164,7 @@ public class CalComeTime {
                         comeTime = (long) (dis / 50 * 60) * 60 + Long.valueOf(lastOrderReceiptTime.get(driverId));
                 }
                 logger.info("driver come time is : " + driverId + " " + comeTime);
+//                logger.info("driver lastOrderReceiptTime : " + driverId + Long.valueOf(lastOrderReceiptTime.get(driverId)));
                 long start = System.currentTimeMillis() / 1000;
                 long time_limit = timeLimit_minute * 60;
 //                logger.info("last order receipt time is : " + lastOrderReceiptTime.get(driverId));

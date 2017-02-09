@@ -222,6 +222,50 @@ public class RecommendHandler implements RecommendService.Iface {
             logger.info("limit judge cause no driver is satisfy");
             return finalResult(recordInfo, driverSort, noTimeSatisfyDriverIdList, beFilteredDriverIdList, boundLineDriverIdList, notMeetLimitDRiverIdList, req.getLineNumber(), boundLineDriverId);
         }
+//        //特殊司机处理  如果被过滤  放在被特殊条件过滤的司机列表里面
+//        List<String> noSpecialDriver = new ArrayList<String>();
+//        if (req.getWarehouse().toLowerCase().contains("09")) {
+//            if (req.getTotalBoxCount() > 240)
+//                for (String driverId : driverIdList) {
+//                    if (driverId.equals("218472916299087279")) {
+//                        beFilteredDriverIdList.add("218472916299087279");
+//                        continue;
+//                    } else if (driverId.equals("1730556454450908558")) {
+//                        beFilteredDriverIdList.add("1730556454450908558");
+//                        continue;
+//                    } else if (driverId.equals("7224384990447067144")) {
+//                        beFilteredDriverIdList.add("7224384990447067144");
+//                        continue;
+//                    }
+//                    noSpecialDriver.add(driverId);
+//                }
+//        }
+//        logger.info("driverId size is : " + driverIdList.size());
+//        if (noSpecialDriver.size() > 0)
+//            driverIdList = noSpecialDriver;
+//        logger.info("driverId size is : " + driverIdList.size());
+//        logger.info("noSpecialDriver size is : " + noSpecialDriver.size());
+        //如果里面有小车  则优先
+        List<String> smallCarList = new ArrayList<String>();
+        for (String driverId : driverIdList) {
+            if (recordInfo.get(driverId).getCarType() == 2) {
+                smallCarList.add(driverId);
+            } else {
+                beFilteredDriverIdList.add(driverId);
+            }
+        }
+        if (smallCarList.size() > 0) {
+            logger.info("存在小车司机");
+            for (String driverId : smallCarList){
+                logger.info("小车司机 : " + driverId);
+            }
+            driverIdList = smallCarList;
+        }else {
+            beFilteredDriverIdList.clear();
+        }
+        logger.info("driverId size is : " + driverIdList.size());
+        logger.info("smallCarList size is : " + smallCarList.size());
+
         //特殊司机处理  如果被过滤  放在被特殊条件过滤的司机列表里面
         List<String> noSpecialDriver = new ArrayList<String>();
         if (req.getWarehouse().toLowerCase().contains("09")) {
@@ -245,27 +289,9 @@ public class RecommendHandler implements RecommendService.Iface {
             driverIdList = noSpecialDriver;
         logger.info("driverId size is : " + driverIdList.size());
         logger.info("noSpecialDriver size is : " + noSpecialDriver.size());
-        //如果里面有小车  则优先
-        List<String> smallCarList = new ArrayList<String>();
-        for (String driverId : driverIdList) {
-            if (recordInfo.get(driverId).getCarType() == 2) {
-                smallCarList.add(driverId);
-            } else {
-                beFilteredDriverIdList.add(driverId);
-            }
-        }
-        if (smallCarList.size() > 0) {
-            logger.info("存在小车司机");
-            for (String driverId : smallCarList){
-                logger.info("小车司机 : " + driverId);
-            }
-            driverIdList = smallCarList;
-        }else {
-            beFilteredDriverIdList.clear();
-        }
-        logger.info("driverId size is : " + driverIdList.size());
-        logger.info("smallCarList size is : " + smallCarList.size());
-        int timeLimit_minute = 500;//  时间限制
+
+
+        int timeLimit_minute = 1000;//  时间限制
         //计算出每个司机回来的时间   并筛选出回来时间满足的司机可以推荐
         List<String> TimeSatisfyDriverIdList = calComeTime.comeback(driverIdList, req.getWarehouse().toLowerCase(), timeLimit_minute);
         if (TimeSatisfyDriverIdList.size() == 0) {
