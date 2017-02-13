@@ -255,7 +255,7 @@ public class RecommendHandler implements RecommendService.Iface {
             }
         }
         if (smallCarList.size() > 0) {
-            logger.info("存在小车司机");
+            logger.info("存在小车司机情况");
             for (String driverId : smallCarList){
                 logger.info("小车司机 : " + driverId);
             }
